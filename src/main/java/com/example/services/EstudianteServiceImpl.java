@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.dao.EstudianteDao;
 import com.example.entities.Estudiante;
 
-@Service
+@Service //Para la comunicacion entre Dao y Controller se necesita el Service
 
 public class EstudianteServiceImpl implements EstudianteService {
 
