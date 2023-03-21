@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.entities.Estudiante;
 
-@Repository //Se genera los beans automáticamente, no hace falta el beans.xml
+@Repository //Con la nueva versión no haría falta poner Repository -Se genera los beans automáticamente, no hace falta el beans.xml
 public interface EstudianteDao extends JpaRepository<Estudiante, Integer> {
     
 }
