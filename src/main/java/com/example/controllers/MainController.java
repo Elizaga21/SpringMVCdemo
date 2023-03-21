@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.entities.Estudiante;
+import com.example.entities.Facultad;
 import com.example.services.EstudianteService;
+import com.example.services.FacultadService;
 
 /**
  * El Main Controller RESPONDE a una peticion concreta y la delega posteriormente en un metodo que
@@ -22,7 +24,10 @@ import com.example.services.EstudianteService;
 public class MainController {
 
     @Autowired //Inyectar dependencia
-    private EstudianteService estudianteService; //Inyectar 
+    private EstudianteService estudianteService; //Inyectar servicio estudiantes
+
+    @Autowired
+    private FacultadService facultadService; //Inyectar servicio de facultad
 
     /**
      * Este metodo devuelve un listado de estudiantes
@@ -46,7 +51,10 @@ public class MainController {
     @GetMapping("/frmAltaEstudiante")
     public String formularioAltaEstudiante(Model model) {
 
+        List<Facultad> facultades = facultadService.findAll(); //Se añade listado de facultades para el formulario
+
        model.addAttribute("estudiante", new Estudiante()); // esta vacio el parametro porque en el formulario se rellena
+       model.addAttribute("facultades", facultades);
 
         return "views/formularioAltaEstudiante";
     }
