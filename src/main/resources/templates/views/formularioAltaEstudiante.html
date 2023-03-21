@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Formulario de Alta de Estudiante</h1>
+
+    <form th:object="${estudiante}">
+ 
+        <label for="nombre"> Nombre:</label>
+        <input type="text" name="nombre" id="nombre" th:field="*{nombre}">
+
+    </form>
+
+    <!-- ¿Como funciona un formulario HTML en general-->
+  <!--- <form action="/altaEstudiante" method="post">
+        <input name="nombre" placeholder="Escriba aquí su nombre" type="text">
+        <label>Fecha Nacimiento:</label>
+        <input name="fechaNacimiento" type="date" id="fechaNacimiento">
+        <input type="submit" value="Enviar">
+    </form>
+-->
+</body>
+</html>
