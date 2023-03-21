@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -67,7 +68,10 @@ public class MainController {
      */
 
      @PostMapping("/altaEstudiante")
-    public String altaEstudiante () {
+    public String altaEstudiante (@ModelAttribute Estudiante estudiante) { //en el parametro recibe el metodo ModelAttribute
+
+        estudianteService.save(estudiante);
+
 
           return "redirect:/listar"; 
           // return new RedirectView("/listar"); con este método se utiliza un RedirectView en public RedirectView altaEstudiante
