@@ -10,7 +10,8 @@
 <body>
     <h1>Formulario de Alta de Estudiante</h1>
 
-    <form th:object="${estudiante}">
+    <!-- Se utiliza th:action @ para direccionar el formulario al metodo altaEstudiante de Main Controller-->
+    <form th:object="${estudiante}" th:action="@{/altaEstudiante}" method="post">
  
         <label for="nombre"> Nombre:</label>
         <input type="text" name="nombre" id="nombre" th:field="*{nombre}" required>
@@ -34,6 +35,7 @@
 
         <label for="beca"> Beca recibida:</label>
         <input type="text" name="beca" id="beca" th:field="*{beca}" required>
+        <br>
 
         <label for="idFacultad">Facultad:</label>
         <select class="form-select" aria-label="Default select example" name="facultad" id="idFacultad">
@@ -44,6 +46,7 @@
 
         </select>
     
+        <br>
         <input type="submit" value="Alta">
     </form>
 
