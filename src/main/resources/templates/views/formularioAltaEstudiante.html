@@ -50,7 +50,7 @@
 
            <option th:each="facultad : ${facultades}" th:value="${facultad.id}" 
            th:text="${facultad.nombre}" 
-           th:selected="${facultad.id == estudiante.facultad.id}"> </option>
+           th:selected="${estudiante.facultad != null and facultad.id == estudiante.facultad.id}"> </option>
 
 
         </select>
@@ -58,7 +58,7 @@
         <label for="numerosTelefonos">Teléfono(s)</label>
         <input type="text" name="numerosTelefonos" id="numerosTelefonos" 
         placeholder="Uno o varios separados por punto y coma"
-        >
+        th:value="${telefonos}">
     
         <br>
         <input type="submit" value="Alta">
