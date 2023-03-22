@@ -1,6 +1,8 @@
 package com.example.controllers;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,13 +11,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.entities.Estudiante;
 import com.example.entities.Facultad;
+import com.example.entities.Telefono;
 import com.example.services.EstudianteService;
 import com.example.services.FacultadService;
+import com.example.services.TelefonoService;
 
 /**
  * El Main Controller RESPONDE a una peticion concreta y la delega posteriormente en un metodo que
@@ -26,11 +31,16 @@ import com.example.services.FacultadService;
 @RequestMapping("/") //MainController responde las peticiones que se vayan recibiendo
 public class MainController {
 
+    private static final Logger LOG = Logger.getLogger("MainController");
+
     @Autowired //Inyectar dependencia
     private EstudianteService estudianteService; //Inyectar servicio estudiantes
 
     @Autowired
     private FacultadService facultadService; //Inyectar servicio de facultad
+
+    @Autowired
+    private TelefonoService telefonoService;
 
     /**
      * Este metodo devuelve un listado de estudiantes
@@ -68,14 +78,40 @@ public class MainController {
      */
 
      @PostMapping("/altaEstudiante")
-    public String altaEstudiante (@ModelAttribute Estudiante estudiante) { //en el parametro recibe el metodo ModelAttribute
+    public String altaEstudiante (@ModelAttribute Estudiante estudiante ,
+            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) { //en el parametro recibe el metodo ModelAttribute y el RequestParam para los tel
 
+        LOG.info("Telefonos recibidos: " + telefonosRecibidos); 
+
+        List<String> listadoNumerosTelefonos = null; //primero lo declaramos null inicialmente
+
+        if(telefonosRecibidos != null) { //También se puede añadir required en el formulario 
+
+        String[] arrayTelefonos = telefonosRecibidos.split("/"); 
+
+        listadoNumerosTelefonos = Arrays.asList(arrayTelefonos);
+
+
+    }
+        
         estudianteService.save(estudiante);
 
+        if (listadoNumerosTelefonos != null) { //se crea un tlf y se guarda un teléfono (flujo telefonos)
+            listadoNumerosTelefonos.stream().forEach(n -> { 
+                Telefono telefonoObject = Telefono
+            .builder()
+            .numero(n)
+            .estudiante(estudiante)
+            .build();
+
+            telefonoService.save(telefonoObject); //Añade los telefonos a la Base de Datos MySQL
+        });
+
+        }
 
           return "redirect:/listar"; 
           // return new RedirectView("/listar"); con este método se utiliza un RedirectView en public RedirectView altaEstudiante
 
     }
-
 }
+
