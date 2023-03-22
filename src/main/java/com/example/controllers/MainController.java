@@ -153,10 +153,17 @@ public class MainController {
    model.addAttribute("telefonos", numerosDeTelefono);
    model.addAttribute("facultades", facultades);
 
-
- 
-
     return "views/formularioAltaEstudiante";
   }
+  /**
+   * Método de borrar estudiante
+   */
+
+   @GetMapping("/borrar/{id}")
+   public String borrarEstudiante (@PathVariable(name = "id") int idEstudiante) {
+    estudianteService.deleteById(idEstudiante);
+
+    return "redirect:/listar";
+   }
 }
 
