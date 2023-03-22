@@ -3,17 +3,18 @@ package com.example.controllers;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.entities.Estudiante;
 import com.example.entities.Facultad;
@@ -77,7 +78,7 @@ public class MainController {
      * 
      */
 
-     @PostMapping("/altaEstudiante")
+     @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante (@ModelAttribute Estudiante estudiante ,
             @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) { //en el parametro recibe el metodo ModelAttribute y el RequestParam para los tel
 
@@ -113,5 +114,29 @@ public class MainController {
           // return new RedirectView("/listar"); con este método se utiliza un RedirectView en public RedirectView altaEstudiante
 
     }
+ /**
+  * Actualiza un estudiante,antes se debe añadir en listarEstudiantes.html
+  * Muestra el formulario para actualizar un estudiante
+  */
+
+  @GetMapping("/frmActualizar/{id}")
+  public String frmActualizarEstudiante(@PathVariable(name = "id") int idEstudiante, Model model) { //para extraer la variable en la ruta se utiliza @PathVariable
+ // Model son los datos del estudiante y se debe poner como parametro
+
+   Estudiante estudiante = estudianteService.findById(idEstudiante);
+   List<Telefono> todosTelefonos = telefonoService.findAll();
+   //Recibe el telefono y lo pasa por el flujo pidiendo el id del estudiante creando una coleccion/lista
+   List<Telefono> telefonosDelEstudiante = todosTelefonos.stream().filter
+   (telefono -> telefono.getEstudiante().getId() == idEstudiante)
+   .collect(Collectors.toList());
+
+   //Model se utiliza para rellenar el formulario con datos
+   model.addAttribute("estudiantes", estudiante);
+   model.addAttribute("telefonos", telefonosDelEstudiante);
+
+ 
+
+    return "views/formularioAltaEstudiante";
+  }
 }
 
