@@ -67,6 +67,9 @@ public class MainController {
 
         List<Facultad> facultades = facultadService.findAll(); //Se añade listado de facultades para el formulario
 
+
+        Estudiante estudiante = new Estudiante();
+
        model.addAttribute("estudiante", new Estudiante()); // esta vacio el parametro porque en el formulario se rellena
        model.addAttribute("facultades", facultades);
 
@@ -130,9 +133,17 @@ public class MainController {
    (telefono -> telefono.getEstudiante().getId() == idEstudiante)
    .collect(Collectors.toList());
 
+   String numerosDeTelefono = telefonosDelEstudiante.stream()
+   .map(telefono -> telefono.getNumero()).collect(Collectors.joining(";"));
+
+   List<Facultad> facultades = facultadService.findAll();
+
+
    //Model se utiliza para rellenar el formulario con datos
-   model.addAttribute("estudiantes", estudiante);
-   model.addAttribute("telefonos", telefonosDelEstudiante);
+   model.addAttribute("estudiante", estudiante);
+   model.addAttribute("telefonos", numerosDeTelefono);
+   model.addAttribute("facultades", facultades);
+
 
  
 
