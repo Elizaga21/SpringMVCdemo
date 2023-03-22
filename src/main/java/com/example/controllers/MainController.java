@@ -87,6 +87,13 @@ public class MainController {
 
         LOG.info("Telefonos recibidos: " + telefonosRecibidos); 
 
+     // Es una modificacion y borramos el estudiante y los telefonos correspondientes.NO HACER SI NO HAY CLASE TELEFONO
+
+        if (estudiante.getId() != 0) {
+
+            estudianteService.deleteById(estudiante.getId());
+        }
+        
         List<String> listadoNumerosTelefonos = null; //primero lo declaramos null inicialmente
 
         if(telefonosRecibidos != null) { //También se puede añadir required en el formulario 
@@ -100,13 +107,15 @@ public class MainController {
         
         estudianteService.save(estudiante);
 
+        //Borrar todos los teléfonos que tenga el estudiante, si hay que insertar nuevos al modificarlos
+
         if (listadoNumerosTelefonos != null) { //se crea un tlf y se guarda un teléfono (flujo telefonos)
             listadoNumerosTelefonos.stream().forEach(n -> { 
                 Telefono telefonoObject = Telefono
             .builder()
             .numero(n)
             .estudiante(estudiante)
-            .build();
+           .build();
 
             telefonoService.save(telefonoObject); //Añade los telefonos a la Base de Datos MySQL
         });

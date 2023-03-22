@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 
-public class Estudiante implements Serializable{
+public class Estudiante implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // Las tablas deben tener un id, autoincremenetal y se debe poner con @
@@ -59,7 +59,7 @@ public class Estudiante implements Serializable{
     private Facultad facultad;
 
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "estudiante")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "estudiante")
     private List<Telefono> telefonos;
 
 

@@ -32,7 +32,7 @@ public class Telefono implements Serializable {
     private String numero;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Estudiante estudiante;
 
 
