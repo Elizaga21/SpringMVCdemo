@@ -24,54 +24,56 @@ import com.example.services.FacultadService;
 import com.example.services.TelefonoService;
 
 /**
- * El Main Controller RESPONDE a una peticion concreta y la delega posteriormente en un metodo que
- * tiene en cuenta el verbo (GET,POST, PUT, DELETE,OPTION) del protocolo HTTP utilizado para realizar la peticion
+ * El Main Controller RESPONDE a una peticion concreta y la delega
+ * posteriormente en un metodo que
+ * tiene en cuenta el verbo (GET,POST, PUT, DELETE,OPTION) del protocolo HTTP
+ * utilizado para realizar la peticion
  */
 
-@Controller //El servlet sigue estando pero dentro del Dispatcher Servlet
-@RequestMapping("/") //MainController responde las peticiones que se vayan recibiendo
+@Controller // El servlet sigue estando pero dentro del Dispatcher Servlet
+@RequestMapping("/") // MainController responde las peticiones que se vayan recibiendo
 public class MainController {
 
     private static final Logger LOG = Logger.getLogger("MainController");
 
-    @Autowired //Inyectar dependencia
-    private EstudianteService estudianteService; //Inyectar servicio estudiantes
+    @Autowired // Inyectar dependencia
+    private EstudianteService estudianteService; // Inyectar servicio estudiantes
 
     @Autowired
-    private FacultadService facultadService; //Inyectar servicio de facultad
+    private FacultadService facultadService; // Inyectar servicio de facultad
 
     @Autowired
     private TelefonoService telefonoService;
 
     /**
      * Este metodo devuelve un listado de estudiantes
-     * Antes se debe crear una carpeta views dentro de templates y luego otro file con el nombre del metodo
+     * Antes se debe crear una carpeta views dentro de templates y luego otro file
+     * con el nombre del metodo
      */
     @GetMapping("/listar")
     public ModelAndView listar() { // Este Método respondera concretamente a cada peticion
 
         List<Estudiante> estudiantes = estudianteService.findAll();
 
-
         ModelAndView mav = new ModelAndView("views/listarEstudiantes");
         mav.addObject("estudiantes", estudiantes);
-        
 
         return mav;
     }
 
-/*Muestra el formulario de alta de estudiante
- */    
+    /*
+     * Muestra el formulario de alta de estudiante
+     */
     @GetMapping("/frmAltaEstudiante")
     public String formularioAltaEstudiante(Model model) {
 
-        List<Facultad> facultades = facultadService.findAll(); //Se añade listado de facultades para el formulario
-
+        List<Facultad> facultades = facultadService.findAll(); // Se añade listado de facultades para el formulario
 
         Estudiante estudiante = new Estudiante();
 
-       model.addAttribute("estudiante", new Estudiante()); // esta vacio el parametro porque en el formulario se rellena
-       model.addAttribute("facultades", facultades);
+        model.addAttribute("estudiante", new Estudiante()); // esta vacio el parametro porque en el formulario se
+                                                            // rellena
+        model.addAttribute("facultades", facultades);
 
         return "views/formularioAltaEstudiante";
     }
@@ -81,89 +83,90 @@ public class MainController {
      * 
      */
 
-     @PostMapping("/altaModificacionEstudiante")
-    public String altaEstudiante (@ModelAttribute Estudiante estudiante ,
-            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) { //en el parametro recibe el metodo ModelAttribute y el RequestParam para los tel
+    @PostMapping("/altaModificacionEstudiante")
+    public String altaEstudiante(@ModelAttribute Estudiante estudiante,
+            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) { // en el parametro recibe el metodo
+                                                                                  // ModelAttribute y el RequestParam
+                                                                                  // para los tel
 
-        LOG.info("Telefonos recibidos: " + telefonosRecibidos); 
+        LOG.info("Telefonos recibidos: " + telefonosRecibidos);
 
-     // Es una modificacion y borramos el estudiante y los telefonos correspondientes.NO HACER SI NO HAY CLASE TELEFONO
-
-        if (estudiante.getId() != 0) {
-
-            estudianteService.deleteById(estudiante.getId());
-        }
-        
-        List<String> listadoNumerosTelefonos = null; //primero lo declaramos null inicialmente
-
-        if(telefonosRecibidos != null) { //También se puede añadir required en el formulario 
-
-        String[] arrayTelefonos = telefonosRecibidos.split("/"); 
-
-        listadoNumerosTelefonos = Arrays.asList(arrayTelefonos);
-
-
-    }
-        
         estudianteService.save(estudiante);
 
-        //Borrar todos los teléfonos que tenga el estudiante, si hay que insertar nuevos al modificarlos
+        List<String> listadoNumerosTelefonos = null; // primero lo declaramos null inicialmente
 
-        if (listadoNumerosTelefonos != null) { //se crea un tlf y se guarda un teléfono (flujo telefonos)
-            listadoNumerosTelefonos.stream().forEach(n -> { 
+        if (telefonosRecibidos != null) { // También se puede añadir required en el formulario
+
+            String[] arrayTelefonos = telefonosRecibidos.split("/");
+
+            listadoNumerosTelefonos = Arrays.asList(arrayTelefonos);
+        }
+
+        // Borrar todos los teléfonos que tenga el estudiante, si hay que insertar
+        // nuevos al modificarlos
+
+        if (listadoNumerosTelefonos != null) {
+            telefonoService.deleteByEstudiante(estudiante); // se crea un tlf y se guarda un teléfono (flujo telefonos)
+            listadoNumerosTelefonos.stream().forEach(n -> {
                 Telefono telefonoObject = Telefono
-            .builder()
-            .numero(n)
-            .estudiante(estudiante)
-           .build();
+                        .builder()
+                        .numero(n)
+                        .estudiante(estudiante)
+                        .build();
 
-            telefonoService.save(telefonoObject); //Añade los telefonos a la Base de Datos MySQL
-        });
+                telefonoService.save(telefonoObject); // Añade los telefonos a la Base de Datos MySQL
+            });
 
         }
 
-          return "redirect:/listar"; 
-          // return new RedirectView("/listar"); con este método se utiliza un RedirectView en public RedirectView altaEstudiante
+        return "redirect:/listar";
+        // return new RedirectView("/listar"); con este método se utiliza un
+        // RedirectView en public RedirectView altaEstudiante
 
     }
- /**
-  * Actualiza un estudiante,antes se debe añadir en listarEstudiantes.html
-  * Muestra el formulario para actualizar un estudiante
-  */
 
-  @GetMapping("/frmActualizar/{id}")
-  public String frmActualizarEstudiante(@PathVariable(name = "id") int idEstudiante, Model model) { //para extraer la variable en la ruta se utiliza @PathVariable
- // Model son los datos del estudiante y se debe poner como parametro
+    /**
+     * Actualiza un estudiante,antes se debe añadir en listarEstudiantes.html
+     * Muestra el formulario para actualizar un estudiante
+     */
 
-   Estudiante estudiante = estudianteService.findById(idEstudiante);
-   List<Telefono> todosTelefonos = telefonoService.findAll();
-   //Recibe el telefono y lo pasa por el flujo pidiendo el id del estudiante creando una coleccion/lista
-   List<Telefono> telefonosDelEstudiante = todosTelefonos.stream().filter
-   (telefono -> telefono.getEstudiante().getId() == idEstudiante)
-   .collect(Collectors.toList());
+    @GetMapping("/frmActualizar/{id}")
+    public String frmActualizarEstudiante(@PathVariable(name = "id") int idEstudiante, Model model) { // para extraer la
+                                                                                                      // variable en la
+                                                                                                      // ruta se utiliza
+                                                                                                      // @PathVariable
+        // Model son los datos del estudiante y se debe poner como parametro
 
-   String numerosDeTelefono = telefonosDelEstudiante.stream()
-   .map(telefono -> telefono.getNumero()).collect(Collectors.joining(";"));
+        Estudiante estudiante = estudianteService.findById(idEstudiante);
+        List<Telefono> todosTelefonos = telefonoService.findAll();
+        // Recibe el telefono y lo pasa por el flujo pidiendo el id del estudiante
+        // creando una coleccion/lista
+        List<Telefono> telefonosDelEstudiante = todosTelefonos.stream()
+                .filter(telefono -> telefono.getEstudiante().getId() == idEstudiante)
+                .collect(Collectors.toList());
 
-   List<Facultad> facultades = facultadService.findAll();
+        String numerosDeTelefono = telefonosDelEstudiante.stream()
+                .map(telefono -> telefono.getNumero()).collect(Collectors.joining(";"));
 
+        List<Facultad> facultades = facultadService.findAll();
 
-   //Model se utiliza para rellenar el formulario con datos
-   model.addAttribute("estudiante", estudiante);
-   model.addAttribute("telefonos", numerosDeTelefono);
-   model.addAttribute("facultades", facultades);
+        // Model se utiliza para rellenar el formulario con datos
+        model.addAttribute("estudiante", estudiante);
+        model.addAttribute("telefonos", numerosDeTelefono);
+        model.addAttribute("facultades", facultades);
 
-    return "views/formularioAltaEstudiante";
-  }
-  /**
-   * Método de borrar estudiante
-   */
+        return "views/formularioAltaEstudiante";
+    }
 
-   @GetMapping("/borrar/{id}")
-   public String borrarEstudiante (@PathVariable(name = "id") int idEstudiante) {
-    estudianteService.deleteById(idEstudiante);
+    /**
+     * Método de borrar estudiante
+     */
 
-    return "redirect:/listar";
-   }
+    @GetMapping("/borrar/{id}")
+    public String borrarEstudiante(@PathVariable(name = "id") int idEstudiante) {
+
+        estudianteService.delete(estudianteService.findById(idEstudiante));
+
+        return "redirect:/listar";
+    }
 }
-

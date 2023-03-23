@@ -54,12 +54,12 @@ public class Estudiante implements Serializable {
     //private int idFacultad; No haría falta ponerlo porque en @JoinColumn se crearía sólo
 
     //Relación entre tablas
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idFacultad")
     private Facultad facultad;
 
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "estudiante")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "estudiante")
     private List<Telefono> telefonos;
 
 

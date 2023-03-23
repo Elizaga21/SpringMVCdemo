@@ -9,6 +9,7 @@ public interface EstudianteService {
     public Estudiante findById(int idEstudiante); //Busca por Id
     public void deleteById(int idEstudiante); //Borra
     public void save (Estudiante estudiante); //Guarda y actualiza
+    public void delete (Estudiante estudiante); // Borrar
     
     /**
      * No es necesario un método UPDATE porque el save inserta o actualiza, en dependencia de que el idEstudiante exista 

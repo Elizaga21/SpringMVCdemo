@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dao.FacultadDao;
 import com.example.entities.Facultad;
@@ -28,14 +29,15 @@ public class FacultadServiceImpl implements FacultadService {
     }
 
     @Override
+    @Transactional
     public void deleteById(int idFacultad) {
         // TODO Auto-generated method stub
         facultadDao.deleteById(idFacultad);
     }
 
     @Override
+    @Transactional
     public void save(Facultad facultad) {
-        // TODO Auto-generated method stub
         facultadDao.save(facultad);
     }
     

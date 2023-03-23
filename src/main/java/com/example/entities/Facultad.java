@@ -39,7 +39,7 @@ public class Facultad  implements Serializable{
 
     //Relación entre tablas. MappedBy realiza una relacion bidireccional
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "facultad" ) //Atributo de Estudiante
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "facultad" ) //Atributo de Estudiante
     private List<Estudiante> estudiantes;
     
 }
