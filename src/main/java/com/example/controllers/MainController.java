@@ -168,5 +168,29 @@ public class MainController {
         estudianteService.delete(estudianteService.findById(idEstudiante));
 
         return "redirect:/listar";
+
+    }
+
+        /**
+         * Método que muestra los detalles
+         */
+
+     @GetMapping("/detalles/{id}") 
+     public String detallesEstudiante(@PathVariable(name = "id") int idEstudiante, Model model) {
+        
+        Estudiante estudiante = estudianteService.findById(idEstudiante);
+
+        List<Telefono> telefonos = telefonoService.findByEstudiante(estudiante);
+
+        List<String> numerosTelefonos = telefonos.stream()
+        .map(t -> t.getNumero())
+        .collect(Collectors.toList());
+
+        model.addAttribute("estudiante", estudiante);
+        model.addAttribute("telefonos", numerosTelefonos);
+
+        return "views/estudianteDetalles";
+
+
     }
 }

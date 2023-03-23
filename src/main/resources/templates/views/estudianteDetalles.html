@@ -7,18 +7,15 @@
     <title>Detalles de los Estudiantes</title>
 </head>
 <body>
-    <h1> Detalles EStudiantes</h1>
+    <h1 th:text="'Detalles del Estudiante' + ' ' + ${estudiante.nombre} + ' ' +  ${estudiante.primerApellido}"> Detalles EStudiantes</h1>
 
-    <table>
-        <thead> 
-           <tr>
+    <div>
+        Teléfonos:
+        <ul>
+            <li th:each="telefono : ${telefonos}" th:text="${telefono}"></li>
+        </ul>
+    </div>
 
-          <th>Nombre</th>
-          <th>Teléfonos</th>
-
-        </tr> 
-        
-    </thead>
     
 </body>
 </html>
