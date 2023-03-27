@@ -10,7 +10,7 @@
     <h1 th:text="'Detalles del Estudiante' + ' ' + ${estudiante.nombre} + ' ' +  ${estudiante.primerApellido}"> Detalles EStudiantes</h1>
 
 
-    <img alt="Imagen de un perro Samoyedo" th:src="@{/images/dog.jpg}" width="420" height="320">
+    <img alt="Imagen de un perro Samoyedo" th:src="@{/images/}+${estudiante.foto}" width="420" >
 
     <div>
         Teléfonos:
