@@ -95,7 +95,7 @@ public class MainController {
 
         List<String> listadoNumerosTelefonos = null; // primero lo declaramos null inicialmente
 
-        if (telefonosRecibidos != null) { // También se puede añadir required en el formulario
+        if (telefonosRecibidos != null ) { // También se puede añadir required en el formulario
 
             String[] arrayTelefonos = telefonosRecibidos.split("/");
 
