@@ -111,6 +111,9 @@ public class MainController {
                 //Guardamos la imagen el el File System
                 Files.write(Paths.get(rutaAbsoluta), imagenEnBytes);
 
+                //Asociar la imagen con el objeto estudiante que se va a guardar
+
+                estudiante.setFoto(imagen.getOriginalFilename());
 
             } catch (Exception e) {
             }
