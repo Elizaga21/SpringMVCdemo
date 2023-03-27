@@ -1,5 +1,8 @@
 package com.example.controllers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.entities.Estudiante;
@@ -85,11 +89,32 @@ public class MainController {
 
     @PostMapping("/altaModificacionEstudiante")
     public String altaEstudiante(@ModelAttribute Estudiante estudiante,
-            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos) { // en el parametro recibe el metodo
+            @RequestParam(name = "numerosTelefonos") String telefonosRecibidos,
+            @RequestParam(name = "foto") MultipartFile imagen) { // en el parametro recibe el metodo
                                                                                   // ModelAttribute y el RequestParam
                                                                                   // para los tel
 
         LOG.info("Telefonos recibidos: " + telefonosRecibidos);
+
+        if (!imagen.isEmpty()) {
+            try {
+                //Ruta relativa de donde voy a almacenar el archivo de imagen
+                Path rutaRelativa = Paths.get("src/main/resources/static/images/");
+
+                //Necesitamos la ruta absoluta
+                String rutaAbsoluta = rutaRelativa.toFile().getAbsolutePath();
+
+                //Hemos recibido un array de Bytes
+
+                byte[] imagenEnBytes = imagen.getBytes();
+
+                //Guardamos la imagen el el File System
+                Files.write(Paths.get(rutaAbsoluta), imagenEnBytes);
+
+
+            } catch (Exception e) {
+            }
+        }
 
         estudianteService.save(estudiante);
 

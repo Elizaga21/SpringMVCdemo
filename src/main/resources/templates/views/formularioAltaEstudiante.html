@@ -11,7 +11,8 @@
     <h1>Formulario de Alta/Modificación de Estudiante</h1>
 
     <!-- Se utiliza th:action @ para direccionar el formulario al metodo altaEstudiante de Main Controller-->
-    <form th:object="${estudiante}" th:action="@{/altaModificacionEstudiante}" method="post">
+    <form th:object="${estudiante}" th:action="@{/altaModificacionEstudiante}" method="post"
+    enctype="multipart/form-data">
 
         <!--Guardar en un input oculto el id del estudiante -->
         <!-- Se debe hacer un ternario para poner 0 a null cuando sea alta y sea idEstudiante cuando sea modificacion-->
@@ -60,6 +61,10 @@
         placeholder="Uno o varios separados por punto y coma"
         th:value="${telefonos}">
     
+
+        <label for="foto"> Foto: </label>
+        <input type="file" id="foto" name="foto">
+
         <br>
         <input type="submit" value="Alta">
     </form>

@@ -41,6 +41,7 @@ public class Estudiante implements Serializable {
     private String nombre;
     private String primerApellido;
     private String segundoApellido;
+    private String foto;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaAlta;
