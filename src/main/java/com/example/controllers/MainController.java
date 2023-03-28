@@ -106,12 +106,12 @@ public class MainController {
 
                 //Hemos recibido un array de Bytes
 
-                String rutaAbsoluta = "//home//elisabetagullo//Recursos";
+                String rutaAbsoluta = "/home/elisabetagullo/recursos/images";
 
                 byte[] imagenEnBytes = imagen.getBytes();
 
                 //Ruta completa
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "//" //Se le añade doble barra
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "/" //Se le añade doble barra
                 + imagen.getOriginalFilename());
 
                 //Guardamos la imagen el el File System

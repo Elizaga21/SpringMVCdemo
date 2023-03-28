@@ -12,8 +12,8 @@ public class ImagesConfigurer implements WebMvcConfigurer {
         // TODO Auto-generated method stub
         WebMvcConfigurer.super.addResourceHandlers(registry);
 
-        registry.addResourceHandler("/Recursos/**")
-        .addResourceLocations("file:" + "//home//elisabetagullo//Recursos/"); //El asterisco significa que también incluye las carpetas de dentro
+        registry.addResourceHandler("/recursos/**")
+        .addResourceLocations("file:" + "/home/elisabetagullo/recursos/"); //El asterisco significa que también incluye las carpetas de dentro
     
     
     }
